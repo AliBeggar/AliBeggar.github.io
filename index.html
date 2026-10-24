@@ -605,7 +605,7 @@
                                                 </td>
                                                 <td>:</td>
                                                 <td>
-                                                    <span class="badge badge-info">355 Jours restants </span>
+                                                    <span class="badge badge-info" id="jours-restants" data-end-date="2026-12-17">0 Jours restants</span>
                                                 </td>
                                             </tr>
 
@@ -1041,6 +1041,44 @@
 
                 }
             });
+		</script>
+		<script>
+			(function () {
+				var remainingDaysElement = document.getElementById('jours-restants');
+				if (!remainingDaysElement) {
+					return;
+				}
+
+				var endDateValue = remainingDaysElement.getAttribute('data-end-date');
+				if (!endDateValue) {
+					return;
+				}
+
+				var dateParts = endDateValue.split('-');
+				if (dateParts.length !== 3) {
+					return;
+				}
+
+				var endYear = Number(dateParts[0]);
+				var endMonthIndex = Number(dateParts[1]) - 1;
+				var endDay = Number(dateParts[2]);
+				var endDate = new Date(endYear, endMonthIndex, endDay);
+
+				if (Number.isNaN(endDate.getTime())) {
+					return;
+				}
+
+				var now = new Date();
+				var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+				var millisecondsPerDay = 24 * 60 * 60 * 1000;
+				var remainingDays = Math.floor((endDate.getTime() - today.getTime()) / millisecondsPerDay);
+
+				if (remainingDays < 0) {
+					remainingDays = 0;
+				}
+
+				remainingDaysElement.textContent = remainingDays + ' Jours restants';
+			})();
 		</script>
 
 	
